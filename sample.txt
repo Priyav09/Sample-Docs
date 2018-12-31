@@ -1,0 +1,18 @@
+code to return only directory
+
+/*if(file.isDirectory())
+				Files.list(Paths.get(file.getPath())).sorted(Comparator.naturalOrder())
+				.filter((files) ->  { return files.();})
+				.forEach(System.out::println);*/
+			
+			//FileFilter directoryFilter = (File files) -> { 	return files.isDirectory(); };
+
+
+
+
+
+			
+			/*File[] files = file.listFiles((File fi) -> { return fi.isDirectory(); });
+			for (File f : files) {
+				System.out.println(f);
+			}*/

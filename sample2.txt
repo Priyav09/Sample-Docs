@@ -1,0 +1,16 @@
+@ResponseBody – converts return value from our object to http response (i.e.; XML/JSON)
+@RequestBody – converts incoming http request to our object on the fly
+
+@Component – generic and can be used across application.
+@Service – annotate classes at service layer level.
+@Controller – annotate classes at presentation layers level, mainly used in Spring MVC.
+@Repository – annotate classes at persistence layer, which will act as database repository.
+
+
+Maven goals 
+
+compile 
+test
+package 
+install
+Deploy

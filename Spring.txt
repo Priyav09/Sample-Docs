@@ -1,0 +1,123 @@
+					SPRING
+
+Advantages of spring framework :
+Spring has well designed mvc framework 
+ORM and logging framework can be integrated easily 
+With dependency Injection , dependent objects can be created easily
+
+
+Spring Containers :
+
+The Spring container is at the core of the Spring Framework. 
+The container will create the objects, wire them together, configure them, and manage their complete life cycle
+from creation till destruction.The Spring container uses DI to manage the components that make up an application.
+
+The container gets its instructions on what objects to instantiate, configure, and assemble by reading the configuration
+metadata provided.The configuration metadata can be represented either by XML, Java annotations, or Java code. 
+
+
+					Java POJO Class 
+
+					       |
+					       |
+						
+		Spring Metadata  --->	Spring Conatainer (BeanFactory or application Context ) 
+		(XML / Annotation)
+						|
+
+					Ready to run Application   
+
+BeanFactory :
+Beanfactory use lazyloading , beans are instantiated when getbean() method is called.
+
+XmlBeanFactory factory = new XmlBeanFactory (new ClassPathResource("beans.xml")); 
+      HelloWorld obj = (HelloWorld) factory.getBean("helloWorld");  
+
+ApplicationCOntext :
+It implements the BeanFactory interface . It uses eager loading , bean instantiated at application context startup.
+
+
+Bean definition :
+
+The objects that form the backbone of your application and that are managed by the Spring IoC container are called beans.
+A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container. 
+
+Bean definition contains the information called configuration metadata, which is needed for the container to know the 
+following -
+
+How to create a bean
+Bean's lifecycle details
+Bean's dependencies
+
+
+Dependency Injection :
+
+DI supplies the dependencies instead of creating/instantiating it through 'new' operator . 
+Three types of Dependency Injection  :
+1. Setter Injection
+2. Constructor Injection
+3. Interface Injection 
+
+Autowiring :
+Autowiring deals with injetcing the external beans , wires them together and resolves the relationship between beans 
+
+Types :
+-> autowire = "no" (default)
+byName 
+byType
+construtor 
+
+<bean id=“employee” class=“com.spring.series.core.Employee” autowire=“byName”>
+
+### <property> & <constructor-arg> tags always overrides autowiring
+### If there are two or more similar type beans defined in the spring configuration file, then while autowiring byType
+ causes ambiguities and throws “NoUniqueBeanDefinitionException” exception
+### Autowiring of simple types i.e.; primitives (int, float, double, etc) aren’t possible 
+
+--------------------------------------------------------------
+Bean Scope :
+
+singleton  -- Returns single bean instance per IOC container
+prototype -- Returns new bean instance each time requested.
+request -- Returns single bean instance per HTTP request.Every new HTTP request will get new bean instance 
+assigned and on completion bean will be out of scope and available for GC
+session -- Returns single bean instance per HTTP session.
+global-session -- Returns single bean instance per HTTP global session.
+
+--------------------------------------------------------------
+
+To turn on Annotation you need to add below line in your configuration file to check the bean specified in config file 
+
+<context:annotation-config />
+
+else 
+
+Need to add below bean 
+<bean 
+class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
+
+OR 
+
+ <!-- scan packages to register controllers which are annotated -->
+    <context:component-scan base-package="com.spring.series.mvc.controller" /> 
+
+--------------------------------------------------------------
+link :  https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html
+
+Spring AOP ::
+The @AspectJ support can be enabled with XML or Java style configuration. 
+In either case you will also need to ensure that AspectJ’s aspectjweaver.jar library is on the classpath of your application
+
+=> Enabling @AspectJ Support with Java configuration   
+To enable @AspectJ support with Java @Configuration add the @EnableAspectJAutoProxy annotation:
+
+@Configuration
+@EnableAspectJAutoProxy
+public class AppConfig {
+
+}
+
+=> Enabling @AspectJ Support with XML configuration
+To enable @AspectJ support with XML based configuration use the aop:aspectj-autoproxy element:
+
+<aop:aspectj-autoproxy/>

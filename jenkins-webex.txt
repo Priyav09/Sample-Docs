@@ -1,0 +1,25 @@
+GIT 
+
+Interaction with local server/repo 
+
+git init---- To initialize the local Repo
+git status --- to check the status of git
+git add-----Add the files to create index
+git commit-- to commit files to the Local Repo
+git log --- Log of the versions....
+git checkout.--- to get the specific version. 
+
+_________________________________________________________
+
+			Repository (remote)
+				| push/pull
+				|
+
+	Repository (local)	Repository(local)	Repository(local) 
+	
+	   |commit\update
+
+	Working copy		Working copy		Working copy
+
+
+________________________________________________________________

@@ -1,0 +1,143 @@
+					IBatis Framework 
+
+IBatis is a lightweight persistance framework which automates mapping between SQl database and objects .
+
+Difference between Hibernate and IBatis framework is that Ibatis emphasizes to use SQL , 
+while other frameworks like Hibernate use their custom language like HQL (Hibernate Query language) etc .. 
+
+Use iBatis if
+-You want to create your own SQL's and are willing to maintain them
+-your environment is driven by relational data model
+-you have to work existing and complex schema's , Complex joins , stored procedures
+
+Use Hibernate if
+-your environment is driven by object model and wants generates SQL automatically
+
+
+SQL MAP CONFIGURATION FILE  :
+
+Structure of mapper configuration file 
+
+Configuration
+-properties
+-settings
+-typeAliases
+-typeHandlers
+-objectFactory
+-plugins
+-environments
+	-environment
+		-transactionManager
+		-dataSource
+
+Mappers 
+
+These order should be followed or else we ll get exception 
+
+***************
+
+<sqlMapConfig>
+
+<properties resources = '#resource_location'/>  ---> property config file location from which the values will be injected to variables with placeholder 
+
+<settings useStatementNamespaces = 'false' cacheModelsEnabled = 'true' />
+
+<transactionManager type = 'JDBC' >
+<datasource type = 'SIMPLE'>
+<property name = "JDBC.Driver" value = "${driverName}" /> - fetches the driver name from properties config file 
+<property name = "JDBC.ConnectionUrl" value = "${url}" />
+<property name = "JDBC.Username" value = "${username}" />
+<property name = "JDBC.Password" value = "${pwd}" />
+</datasource>
+</transactionManager>
+
+<sqlMap resource = "#resource_location" /> 
+
+
+SQL MAP FILE  :
+
+<selectKey> element in an <insert> statement is used to return that database-generated value.
+
+<sqlMap namespace = "Person" >  		--> namespace ==> POJO class name 
+
+<select id="getPerson" parameterClass = "int" resultClass= "#Class_name" >
+SELECT FROM PERSON 
+Where id = #value ;
+</select>
+
+<insert id='insertPerson' parameterClass = "#class_name">
+insert into person(id, name , DOB)
+values(#id , #name, #dob)
+</insert>
+
+<update id='updatePerson' parameterClass = "#class_name">
+update person
+set name = #name 
+where id = #id 
+</update>
+
+<delete id='deletePerson' parameterClass = "#class_name">
+DELETE PERSON
+Where id = #id 
+</insert>
+
+</sqlMap> 
+
+
+Writing a Java application :::
+
+String resource = "resource_location" ;
+Reader reader = Resources.getResourceAsReader(resource);
+SqlMapClient sqlmap = SqlMapClientBuilder.buildSqlMapClient(reader);
+
+or we can make this as a separate class for global use. 
+
+Class MySqlClientConfig {
+
+private static final SqlMapClient sqlmap ;
+
+try {
+String resource = "resource_location" ;
+Reader reader = Resources.getResourceAsReader(resource);
+sqlmap = SqlMapClientBuilder.buildSqlMapClient(reader); 
+}
+catch() {}
+
+public static SqlMapClient getInstance() {
+return sqlmap ;
+}
+}
+
+Then insert , update , delete operations can be carried out using sqlmap instance . 
+
+sqlmap.update("updatePerson" , person); ---> person contains the values to be updated 
+sqlmap.delete("deletePerson" , person);
+sqlmap.insert("insertPerson" , person);
+
+Person person = (Person)sqlmap.queryForObject("getPerson" , 5 );
+
+
+IBATIS RESULTMAP   :
+
+Ibatis ResultMap are used to provide mapping between result of database query and object properties . 
+
+
+<sqlMap namespace="Contact">
+<!--- Showing data by ID -->
+ <resultMap id="result" class="Contact">
+  <result property="id" column="id"/>
+  <result property="firstName" column="firstName"/>
+  <result property="lastName" column="lastName"/>
+  <result property="email" column="email"/>
+</resultMap>
+<select id="getById" resultMap="result">
+   select * from contact where id=#id#
+</select>
+</sqlMap> 
+
+
+To run resultMap example we have to include following line in our java code.
+
+sqlMap.queryForObject("Contact.getById",new Integer(1));
+
+Here we have passed id value "1" for showing all information on that id.

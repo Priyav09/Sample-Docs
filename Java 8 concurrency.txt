@@ -1,0 +1,153 @@
+#### Difference between runnable and callable 
+
+A Callable needs to implement call() method while a Runnable needs to implement run() method.
+A Callable can return a value but a Runnable cannot.
+A Callable can throw checked exception but a Runnable cannot.
+A Callable can be used with ExecutorService#invokeXXX(Collection<? extends Callable<T>> tasks) methods but a Runnable cannot be.
+
+public interface Runnable {
+    void run();
+}
+
+public interface Callable<V> {
+    V call() throws Exception;
+}
+
+#### Callable  ::
+
+If you are trying to retrieve a value from a task, then use Callable. Now callable on its own will not do the job.
+You will need a Future that you wrap around your Callable and get your values on future.get ().
+Here the calling thread will be blocked till the Future comes back with results which in turn is waiting for Callable's call() method to execute.
+
+If an interface to a target class where you have both Runnable and Callable wrapped methods defined. 
+The calling class will randomly call your interface methods not knowing which is Runnable and which is Callable. 
+The Runnable methods will execute asynchronously, till a Callable method is called.
+Here the calling class's thread will block since you are retrieving values from your target class.
+
+Inside your target class you can make the calls to Callable and Runnable on a single thread executor, making this mechanism similar to a serial dispatch queue.
+So as long as the caller calls your Runnable wrapped methods the calling thread will execute really fast without blocking. 
+As soon as it calls a Callable wrapped in Future method it will have to block till all the other queued items are executed. 
+Only then the method will return with values. This is a synchronization mechanism.
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+####### ExecutorService (Java 1.5) ::
+
+The java.util.concurrent.ExecutorService interface represents an asynchronous execution mechanism which is capable of executing tasks in the background. 
+
+You can use the Executors factory class to create ExecutorService instances too. Here are a few examples of creating an ExecutorService:
+
+ExecutorService executorService1 = Executors.newSingleThreadExecutor();
+ExecutorService executorService2 = Executors.newFixedThreadPool(10);
+ExecutorService executorService3 = Executors.newScheduledThreadPool(10);
+
+ExecutorService Usage:
+
+1. execute method :
+The execute(Runnable) method takes a java.lang.Runnable object, and executes it asynchronously.There is no way of obtaining the result of the executed Runnable.
+execute methods doesnot return any result of Runnable object after execution. 
+
+2.Submit method :
+The submit(Runnable) method also takes a Runnable implementation, but returns a Future object. This object can be used to check whether the Runnable has finished its execution . 
+It returns null if it finishes the execution 
+
+Submit(Callable) method takes callable implementation which returns a Future Object. 
+The Callable's result can be obtained via the Future object returned by the submit(Callable) method. 
+
+                Example :
+				Future future = executorService.submit(new Callable(){
+   					 public Object call() throws Exception {
+       					 System.out.println("Asynchronous Callable");
+        				 return "Callable Result";
+   					 }
+				});
+
+				System.out.println("future.get() = " + future.get());    => future.get can be used to get the results of future object 
+
+
+		output :
+				Asynchronous Callable
+				future.get() = Callable Result 
+
+3.invokeAny or invokeAll ::
+
+The invokeAny() method takes a collection of Callable objects, or subinterfaces of Callable . 
+Invoking the method returns the result of one of the callable object which finishes first instead of future . other tasks are cancelled . 
+
+The invokeAll() method invokes all of the Callable objects you pass to it . it returns the future objects which contains the result of all callables object passed. 
+
+
+### ExecutorService Shutdown ::
+
+When you are done using the ExecutorService you should shut it down, so the threads do not keep running.
+
+For instance, if your application is started via a main() method and your main thread exits your application, 
+the application will keep running if you have an active ExexutorService in your application.The active threads inside this ExecutorService prevents the JVM from shutting down.
+
+Shutdown() - Waits for executing task to complete . It will not accept any new task . All tasks submitted to the ExecutorService before shutdown() is called, are executed.
+Shutdownnow() - It stop all executing tasks right away, and skips all submitted but non-processed tasks. There are no guarantees given about the executing tasks. 
+Perhaps they stop, perhaps the execute until the end.
+
+
+Executor (since 1.5) - Interface --> contains execute method which accepts only Runnable and doesn't return any value 
+ExecutorService - Interface (implements Executor )  - Contains submit method accepts both runnable and callable and return future objects 
+Executors - factory class which contains methods to handle thread pool size (ex : Executors.newFixedThreadPool() )  
+
+
+ScheduledExecutorService :
+An ExecutorService that can schedule commands to run after a given delay, or to execute periodically.
+----------------------------------------------------------------------------------------------------
+
+####### Future   ::: 
+
+A Future represents the result of an asynchronous computation . 
+
+Methods :
+
+cancel()  -- Attempts to cancel the execution of task . It will fail if the task is already completed or cancelled .
+If the task has already started, then the mayInterruptIfRunning parameter determines whether to interupt the running task to stop . 
+
+isCancelled() -- returns true if the method is cancelled 
+
+isDone() -- returns true if completed. Completion may be due to normal termination, an exception, or cancellation
+
+get() -- Waits if necessary for the computation to complete, and then retrieves its result.
+
+get(long timeout , TimeUnit timeunit) -- Waits for specific time for computation to complete, and then retrieves its result if available .
+
+Get method will block the code until the result is available . 
+We can't chain two or more future together and provide the result to other function. 
+Future can't be manually completed. 
+No exception handling in future .
+----------------------------------------------------------------------------------------------------
+
+###### CompletableFuture ::
+
+CompletableFuture implements Future and CompletionStage interface (introduced in java 8) . 
+
+To create completableFuture :
+
+CompletableFuture cf = new CompletableFuture(); 
+
+Methods :
+
+get() - to retrieve the result of execution. get() method blocks until the future is complete . 
+complete() - Is used to manually complete the task. 
+cf.complete(""message") ;  - all clients will be receiving this message and call to complete() will be ignored .
+ 
+If you want to run some background task asynchronously and don’t want to return anything from the task,
+then you can use CompletableFuture.runAsync() method. It takes a Runnable object and returns CompletableFuture<Void> 
+
+CompletableFuture.supplyAsync() - takes Supplier object and returns completablefurture value 
+A Supplier<T> is a simple functional interface which represents a supplier of results.It has get() where the logic should be coded. 
+
+
+----------------------------------------------------------------------------------------------------
+Executors class :
+
+In terms of resources, the newFixedThreadPool will keep all the threads running until they are explicitly terminated. 
+In the newCachedThreadPool Threads that have not been used for sixty seconds are terminated and removed from the cache. 
+

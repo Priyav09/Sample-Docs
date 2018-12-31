@@ -1,0 +1,26 @@
+struts :
+deployment descriptor file -  ans : web.xml
+action class maaping location - ?
+application design pattern ?
+mvc ?
+struts application flow 
+
+Core Java :
+Collection 
+arraylist growable ?
+how arraylist will be internally works when size is increased ?
+Hashmap internal working ?
+hashing ?
+.equals method ?
+which method to be overrided while hashmap is used
+concurrent modification exception ?
+What happens when we reomve element from list while iterating - ans : concurrent modification exception ?
+
+Thread:
+sleep vs wait 
+
+SQL :
+joins 
+query 
+
+

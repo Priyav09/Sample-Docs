@@ -1,0 +1,47 @@
+						Streams API
+
+
+
+
+IntStream :  it will print the numbers in provided range .
+ 1. IntStream.range(0,10)
+	.forEach(Index -> System.out.println(Index));  // same : rangeClosed(0,10) -- includes 10 whereas range omits 10
+
+ 2. IntStream.iterate(seed : 0 , op -> op + 1)  // seed - starting point 
+	.limit(10)
+	.forEach(Index -> System.out.println(Index));
+
+Finding minimum , maximum and distinct numbers
+
+=>	numbers.stream()			//numbers -> List type
+		.min(Comparator.naturalOrder())
+		.get();
+=> 	numbers.stream()
+		.distinct()
+		.collect(Collectors.toList());
+
+Filter :: filter is used to apply the condition . Predicate is expression that evaluates to true or false
+based on which condition is applied.
+
+	List<Integer> intList =	numbers.stream()
+					.filter(Predicate)
+					.collect(Collectors.toList());
+
+Map : it will convert from one datatype to another
+
+
+
+Two types to read a file , copy to linkedlist and print in reverse order 
+
+listOfString = Files.newBufferedReader(Paths.get(file.getPath())).lines().collect(Collectors.toList());
+			ListIterator<String> it = listOfString.listIterator(listOfString.size());
+			Stream.generate(it::previous).limit(listOfString.size()).forEach(System.out::println);
+---------------------------------------------------	
+		
+listOfString = (LinkedList<String>)Files.newBufferedReader(Paths.get(file.getPath())).lines()
+		.collect(Collectors.toCollection(LinkedList::new));
+
+listOfString.descendingIterator().forEachRemaining(System.out::println);
+
+*****************************************************************************
+			

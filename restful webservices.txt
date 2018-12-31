@@ -1,0 +1,31 @@
+						Restful Webservices 
+
+Webservices 	-	Services exposed to internet for programmatic access 
+
+In this client sends the Http request and web service server responds with Http response . 
+
+Protocol 	: No Specific protocol. Rest client can send messages in any format like XML, JSON , text . 
+Http Methods	: Any http methods like GET, POST can be used for exchanging data
+Service definition : No specific service definition documents like WSDL in SOAP webservices are available for REST.  
+	
+WADL - Web Application description language - It's like WSDL that contains description of web service API.
+It's usage is to generate client code that calls the service . 
+
+* Difference between WSDL and WADL 
+
+WSDL - Web service description language - Used as service definiton for SOAP based web service 
+WSDL won't support HTTP operations other than GET and POST , hence it cannot be used with Rest as REST use all http methods. 
+
+WADL is light weight , easier to understand and easy to write than WSDL . Further it supports all http methods . 
+
+***********************
+
+REST Uses the most of the concepts of HTTP 
+
+While designing REST webservices , we should need the below 
+1. Resource based URIs - every resource should be identified by the URIs defined 
+2. Should choose write http methods based on the functionality unlike SOAP which uses POST method in most cases 
+3. Response should send the proper http status code to indicate the status to client
+4. It should contain Message headers to make client and server for format like content type  
+
+*************************	

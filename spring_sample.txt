@@ -1,0 +1,28 @@
+You also can annotate you class:
+
+@PropertySource("classpath:/com/myProject/config/properties/database.properties")
+And have a variable like this:
+
+@Autowired
+private Environment env;
+Now you can access to all your properties in this way:
+
+env.getProperty("database.connection.driver")   
+
+
+using property file 
+define values here ==>
+ex :
+jdbc.driverClassName=oracle.jdbc.OracleDriver
+jdbc.url=jdbc:oracle:thin:@on-the-beach:1521:mysid
+jdbc.username=john
+jdbc.password=lennon 
+
+
+To use it in class 
+
+@Component
+public class AutowiredFakaSource {
+
+  @Value("${jdbc.driverClassName}")
+  private String driverClassName;
