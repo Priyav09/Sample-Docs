@@ -1,0 +1,17 @@
+try with resources 
+the resources should implement autocloseable interface to use try with resources 
+ex: bufferedreader implemented autocloseable hence it can be used lik below 
+try(BufferedReader br = new BufferedReader(new FileReader(filpath))){
+}
+-------------------
+How to compare two arrays 
+Arrays.equals(arr1 , arr2)
+
+Two arrays are equal only if arrays have same size and same elements in all position
+---------------------------
+When garbage collection run  (Google more)
+when heap memory is low
+when CPU is free 
+
+we can request garbage collection to run by system.gc()
+----------------------------
