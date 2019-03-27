@@ -15,3 +15,27 @@ when CPU is free
 
 we can request garbage collection to run by system.gc()
 ----------------------------
+Generics
+
+Class A<T> , pause the type during run time as below A<STring> a = new A<String>();
+
+another way to restrict the type is like "T extends Number" then only sub class of Number type can be passed example Integer , FLoat . 
+same "T super Number " , then only super class of Number can be passed. 
+
+----------------------------
+Concurrent Collections 
+Need :
+-> Traditional collections are not Thread safe which leads to data inconsistency 
+-> Even synchronized TC like vector , synchronizedlist.. lags in performance as this collections locks the entire object for any operations
+(even like read operation)
+-> While iterating over collection if another thread trys to modify the Collection object then it throws concurrent modification exception 
+
+For this reasons concurrent collection came into picture.
+
+Concurrent HashMap - Underlying data structure (Hashtable)
+In this lock will be obtained in segments only for write opertaion , there is no lock for read op .
+follows segment level locking instead of locking entire object. concurrency level(how to divide the map internally to provide lock) 
+defines number of locks for COllection object .
+Example if concurrency level is 4 , then by default size for 4 buckets = 1 lock and so on .
+Default initialcapacity and concurrency level = 16
+
